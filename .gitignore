@@ -1,2 +1,4 @@
 git commands.txt
+*.csv
+!/Records Backup/*.csv
 /Records Backup/*noheader*
