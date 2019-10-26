@@ -7,12 +7,30 @@ import math
 # Constants
 classdict = {'class1': '劍士', 'class2': '拳士', 'class3': '氣功士', 'class5': '力士', 'class6': '召喚師', 'class7': '刺客',
             'class8': '燐劍士', 'class9': '咒術師', 'class10': '乾坤士', 'class4': '槍擊士', 'class11': '鬥士', 'class12': '弓箭手'}
+classAbbrdict = {'class1': 'BM', 'class2': 'KFM', 'class3': 'FM', 'class5': 'DES', 'class6': 'SUM', 'class7': 'ASS',
+            'class8': 'BD', 'class9': 'WL', 'class10': 'SF', 'class4': 'GUN', 'class11': 'WD', 'class12': 'ARC'}
 seasondict = {1: '第一週', 2: '第二週', 3: '第三週', 4: '第四週'}
-
-# Input
 url = 'http://tw.ncsoft.com/bns/event/1910/ranking/list'
-selWeek = "2"  # Week: 1 - 4
-selGameClass = ""  # Class: 1 - 12, Refer to classdict
+
+# Get input variables
+def errorInput():
+    print("輸入格式錯誤，請重來！ Input format error, please retry")
+    exit()
+
+try:
+    selWeek = int(input("輸入週次 Input Week [1-4]: "))
+except ValueError:
+    errorInput()
+if(selWeek > 4 or selWeek < 1):
+    errorInput()
+try:
+    selGameClass = int(input("輸入職業代碼 Input Class Code [0:ALL / 1:BM / 2:KFM / 3:FM / 4:GUN / 5:DES / 6:SUN / 7:ASS / 8:BD / 9:WL / 10:SF / 11:WD / 12:ARC]: "))
+except ValueError:
+    errorInput()
+if(selGameClass > 12 or selGameClass < 0):
+    errorInput()
+if(selGameClass == 0):
+    selGameClass = ""
 
 page = requests.post(url, data = {'week': selWeek, 'gameclass': selGameClass})
 doc = lh.fromstring(page.content)
@@ -38,7 +56,7 @@ ranktable.append(("結算日期",[]))
 ranktable.append(("週次",[]))
 
 # Get latest update time & season
-latesttime = 1016
+latesttime = 0
 for i in range(headerrow + 1, len(tr_elements)):
     row = tr_elements[i]
     col = 0
@@ -49,10 +67,13 @@ for i in range(headerrow + 1, len(tr_elements)):
                 latesttime = logtime
         col += 1
 #latesttime = 1024  # Override a custom latest time
-#print(latesttime)
 latesttimestr = '2019.' + str(latesttime)[:2] + '.' + str(latesttime)[2:]
-seasonstr = seasondict[math.ceil((latesttime - 1016) / 7)]
-#print(seasonstr)
+if(latesttime == 0):
+    # No records
+    print("沒有記錄 No records")
+    exit()
+else:
+    seasonstr = seasondict[math.ceil((latesttime - 1016) / 7)]
 
 # Parse table data
 for i in range(headerrow + 1, len(tr_elements)):
@@ -64,8 +85,6 @@ for i in range(headerrow + 1, len(tr_elements)):
         if col == 1:
             data = classdict[cell[0].get('class')]      
         else:
-            #if col == 4:
-                
             data = cell.text_content()
         ranktable[col][1].append(data)
         col += 1
@@ -75,13 +94,20 @@ for i in range(headerrow + 1, len(tr_elements)):
 Dict = {title:column for (title,column) in ranktable}
 df = pd.DataFrame(Dict)
 
+# Output
 outputDir = os.path.dirname(__file__)
 outputName = '/soloranking1910'
+outputClass = ''
+if(selGameClass != ""):
+    outputClass = '_' + classAbbrdict['class' + str(selGameClass)]
 outputNoHeader = '_noheader'
 outputTimestamp = "_2019" + str(latesttime)
 outputFormat = '.csv'
-df.to_csv(outputDir + outputName + outputTimestamp + outputFormat, index=None)
-df.to_csv(outputDir + outputName + outputNoHeader + outputTimestamp + outputFormat, index=None, header=None)
+outputFileName = outputDir + outputName + outputClass + outputTimestamp + outputFormat
+outputNHFileName = outputDir + outputName + outputClass + outputNoHeader + outputTimestamp + outputFormat
+df.to_csv(outputFileName, index=None)
+df.to_csv(outputNHFileName, index=None, header=None)
 
-# output preview
+# Output preview in console
+print("輸出預覽 Input Preview(只顯示前5行)")
 print(df.head())

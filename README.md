@@ -14,12 +14,10 @@ Things you need to install before running the file
 
 ### Input
 
-There are 2 input variables that can be edited in the source file
+There are 2 input variables during runtime
 
-```
-Line 14: selWeek
-Line 15: selGameClass
-```
+1. Week
+2. Game Class
 
 ## Running the file
 
