@@ -1,8 +1,23 @@
-# BNS SoloRanking1910
+# BNS Solo Ranking 1910
 
 Fetch the ranking records to a .csv file from the official ranking website for parsing
 
-## Getting Started
+## I/O
+
+### Input
+
+There are 2 input variables during runtime
+
+1. Week [1-4]
+2. Game Class [0-12]
+
+### Output
+
+Output is two .csv files under the same directory as the .py file
+
+## Running the file
+
+Explain how to run the file
 
 ### Prerequisites
 
@@ -11,17 +26,6 @@ Things you need to install before running the file
 ```
 1. Python https://www.python.org/
 ```
-
-### Input
-
-There are 2 input variables during runtime
-
-1. Week
-2. Game Class
-
-## Running the file
-
-Explain how to run the file
 
 ### Run from an IDE or a Text Editor
 
@@ -46,10 +50,6 @@ If you added Python to the Windows Path (Environment Variables), simply run the 
 python FULL_PATH_OF_PY_FILE
 e.g. python "c:/Users/user/Desktop/bnssoloranking1910.py"
 ```
-
-### Output
-
-Output is 2 .csv files under the same directory as the .py file
 
 ## Authors
 

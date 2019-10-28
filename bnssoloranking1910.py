@@ -1,3 +1,6 @@
+# BNS Solo Ranking 1910
+# Author: dbnryanc92 (玉蜂丷)
+
 import requests
 import lxml.html as lh
 import pandas as pd
@@ -12,11 +15,11 @@ classAbbrdict = {'class1': 'BM', 'class2': 'KFM', 'class3': 'FM', 'class5': 'DES
 seasondict = {1: '第一週', 2: '第二週', 3: '第三週', 4: '第四週'}
 url = 'http://tw.ncsoft.com/bns/event/1910/ranking/list'
 
-# Get input variables
 def errorInput():
     print("輸入格式錯誤，請重來！ Input format error, please retry")
     exit()
-
+    
+# Get input variables
 try:
     selWeek = int(input("輸入週次 Input Week [1-4]: "))
 except ValueError:
