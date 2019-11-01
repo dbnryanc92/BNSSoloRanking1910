@@ -6,6 +6,7 @@ import lxml.html as lh
 import pandas as pd
 import os
 import math
+from datetime import date, timedelta
 
 # Constants
 classdict = {'class1': '劍士', 'class2': '拳士', 'class3': '氣功士', 'class5': '力士', 'class6': '召喚師', 'class7': '刺客',
@@ -76,7 +77,10 @@ if(latesttime == 0):
     print("沒有記錄 No records")
     exit()
 else:
-    seasonstr = seasondict[math.ceil((latesttime - 1016) / 7)]
+    startdate = date(2019, 10, 16)
+    latestdate = date(2019, int(str(latesttime)[:2]), int(str(latesttime)[2:]))
+    diff = latestdate - startdate
+    seasonstr = seasondict[math.ceil(diff.days / 7)]
 
 # Parse table data
 for i in range(headerrow + 1, len(tr_elements)):
